@@ -1,0 +1,133 @@
+{
+    "version": "1.0",
+    "description": "AirGuard AI Security Policy - Controls which actions are permitted for pollution monitoring operations",
+    "rules": [
+        {
+            "action": "generate_report",
+            "allowed": true,
+            "reason": "Report generation is a read-only operation",
+            "description": "Allows creation of pollution reports from existing data",
+            "constraints": {
+                "max_file_size_mb": 10,
+                "allowed_formats": [
+                    "txt",
+                    "json",
+                    "pdf"
+                ],
+                "max_reports_per_hour": 100
+            }
+        },
+        {
+            "action": "analyze_aqi",
+            "allowed": true,
+            "reason": "Data analysis is a read-only operation",
+            "description": "Allows analysis of Air Quality Index data for monitoring purposes",
+            "constraints": {
+                "max_data_points": 10000,
+                "allowed_metrics": [
+                    "PM2.5",
+                    "PM10",
+                    "NO2",
+                    "SO2",
+                    "CO",
+                    "O3"
+                ],
+                "max_time_range_days": 365
+            }
+        },
+        {
+            "action": "send_alert",
+            "allowed": true,
+            "reason": "Alert sending is permitted for public safety",
+            "description": "Allows sending pollution alerts to notify citizens and authorities",
+            "constraints": {
+                "allowed_severity_levels": [
+                    "info",
+                    "warning",
+                    "critical"
+                ],
+                "max_alerts_per_hour": 50,
+                "max_message_length": 500
+            }
+        },
+        {
+            "action": "shutdown_factory",
+            "allowed": false,
+            "reason": "Critical infrastructure control requires human authorization",
+            "description": "Factory shutdown operations must be performed by authorized personnel with proper legal authority",
+            "alternative": "Contact Delhi Pollution Control Committee for factory shutdown requests"
+        },
+        {
+            "action": "issue_fine",
+            "allowed": false,
+            "reason": "Financial penalties require legal review and human authorization",
+            "description": "Fine issuance requires due process and must be handled by legal authorities",
+            "alternative": "Submit violation reports to Delhi Pollution Control Board for legal action"
+        }
+    ],
+    "default_policy": "deny",
+    "default_reason": "Action not explicitly allowed by security policy",
+    "logging": {
+        "log_all_actions": true,
+        "log_blocked_attempts": true,
+        "log_policy_decisions": true,
+        "retention_days": 90,
+        "log_format": "json",
+        "include_timestamps": true,
+        "include_user_commands": true
+    },
+    "security": {
+        "require_audit_trail": true,
+        "fail_safe_mode": true,
+        "validate_all_inputs": true,
+        "sanitize_file_paths": true,
+        "prevent_path_traversal": true
+    },
+    "rate_limiting": {
+        "enabled": true,
+        "global_max_requests_per_minute": 60,
+        "per_action_limits": {
+            "generate_report": 20,
+            "analyze_aqi": 30,
+            "send_alert": 10
+        }
+    },
+    "file_operations": {
+        "allowed_read_directories": [
+            "data/",
+            "config/"
+        ],
+        "allowed_write_directories": [
+            "output/",
+            "reports/"
+        ],
+        "blocked_directories": [
+            "/etc/",
+            "/sys/",
+            "/proc/",
+            "C:\\Windows\\",
+            "C:\\Program Files\\"
+        ],
+        "max_file_size_mb": 100,
+        "allowed_extensions": [
+            ".txt",
+            ".json",
+            ".csv",
+            ".pdf",
+            ".html"
+        ]
+    },
+    "metadata": {
+        "created": "2024-01-15",
+        "last_updated": "2024-01-15",
+        "version_history": [
+            {
+                "version": "1.0",
+                "date": "2024-01-15",
+                "changes": "Initial policy configuration with core security rules"
+            }
+        ],
+        "maintainer": "AirGuard AI Security Team",
+        "review_schedule": "quarterly"
+    }
+}
