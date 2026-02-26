@@ -1,267 +1,115 @@
 """
-AirGuard AI Agent - Main Controller
+Main Agent Controller for AirGuard AI system.
 
-This module implements the AirGuardAgent class, which is the main controller that
-orchestrates the entire workflow. The agent coordinates intent parsing, policy
-validation, enforcement, and execution while ensuring all actions are logged.
-
-CRITICAL FOR HACKATHON: This is the main entry point that demonstrates the complete
-autonomous AI agent system with policy-based security enforcement.
+This module implements the AirGuardAgent class that orchestrates the entire
+pollution monitoring system, coordinating intent parsing, policy validation,
+enforcement, and execution.
 """
 
 from typing import Dict, Any
 from intent import IntentParser
 from policy import PolicyEngine
-from enforce import Enforcer
+from executor import Executor
 from logger import AuditLogger
+from enforce import Enforcer
 
 
 class AirGuardAgent:
     """
-    Main controller for the AirGuard AI autonomous agent system.
+    Main controller for the AirGuard AI pollution monitoring system.
     
-    The AirGuardAgent orchestrates the complete workflow:
-    1. Parse natural language commands into structured intents
-    2. Validate intents against security policies
-    3. Enforce policy decisions (block or allow)
-    4. Execute approved actions
-    5. Log all actions for audit trails
+    The AirGuardAgent coordinates all system components to process user commands:
+    1. Parse natural language command into structured intent
+    2. Validate intent against security policy
+    3. Enforce policy and execute approved actions
+    4. Log all actions for audit trail
     
-    This demonstrates a complete autonomous AI agent with:
-    - Natural language understanding
-    - Policy-based security
-    - Enforcement layer preventing unauthorized actions
-    - Comprehensive audit logging
-    - OpenClaw integration for system operations
+    This is the main entry point for the hackathon demo.
     
     Attributes:
-        intent_parser: Parses natural language into structured intents
-        policy_engine: Validates intents against security policies
-        enforcer: Enforces policy decisions and executes approved actions
-        logger: Maintains audit logs of all actions
-    
-    Example:
-        >>> agent = AirGuardAgent(parser, policy, enforcer, logger)
-        >>> 
-        >>> # Allowed action
-        >>> result = agent.process_command("Generate pollution report for Delhi")
-        >>> print(result["success"])
-        True
-        >>> 
-        >>> # Blocked action
-        >>> result = agent.process_command("Shutdown factory in Mayapuri")
-        >>> print(result["success"])
-        False
-        >>> print(result["message"])
-        'Action blocked by policy: Critical infrastructure control requires human authorization'
+        parser: IntentParser for natural language processing
+        policy_engine: PolicyEngine for security validation
+        executor: Executor for performing actions
+        logger: AuditLogger for audit trail
+        enforcer: Enforcer for security enforcement
     """
     
-    def __init__(
-        self,
-        intent_parser: IntentParser,
-        policy_engine: PolicyEngine,
-        enforcer: Enforcer,
-        logger: AuditLogger
-    ):
+    def __init__(self, data_dir: str = "airguard-ai/data", 
+                 output_dir: str = "airguard-ai/output",
+                 log_dir: str = "airguard-ai/logs",
+                 policy_file: str = "airguard-ai/policy.json"):
         """
-        Initialize the AirGuardAgent with all required components.
+        Initialize the AirGuard AI agent with all components.
         
         Args:
-            intent_parser: IntentParser instance for parsing commands
-            policy_engine: PolicyEngine instance for policy validation
-            enforcer: Enforcer instance for enforcement and execution
-            logger: AuditLogger instance for audit trails
+            data_dir: Directory containing pollution data
+            output_dir: Directory for generated reports
+            log_dir: Directory for audit logs
+            policy_file: Path to policy configuration file
         """
-        self.intent_parser = intent_parser
-        self.policy_engine = policy_engine
-        self.enforcer = enforcer
-        self.logger = logger
+        # Initialize all components
+        self.parser = IntentParser()
+        self.policy_engine = PolicyEngine(policy_file)
+        self.executor = Executor(data_dir, output_dir)
+        self.logger = AuditLogger(log_dir)
+        self.enforcer = Enforcer(self.policy_engine, self.executor, self.logger)
         
-        # Statistics tracking
-        self._stats = {
-            "total_commands": 0,
-            "successful_actions": 0,
-            "blocked_actions": 0,
-            "errors": 0
-        }
+        print("🤖 AirGuard AI Agent initialized successfully!")
+        print(f"📁 Data directory: {data_dir}")
+        print(f"📁 Output directory: {output_dir}")
+        print(f"📁 Log directory: {log_dir}")
+        print(f"🔒 Policy file: {policy_file}")
     
     def process_command(self, user_command: str) -> Dict[str, Any]:
         """
         Process a natural language command through the full pipeline.
         
-        This is the main entry point for the agent. It coordinates all components
-        to process a user command from natural language to execution.
-        
-        Pipeline:
-        1. Validate input
-        2. Parse intent from natural language
-        3. Validate intent structure
-        4. Check policy (allowed or blocked?)
-        5. If blocked: return denial with reason
-        6. If allowed: enforce and execute
-        7. Log everything
-        8. Return result to user
+        This is the main method for the hackathon demo!
         
         Args:
             user_command: Natural language command from user
-        
-        Returns:
-            Dictionary with keys:
-            - success (bool): Whether the action succeeded
-            - message (str): Human-readable status message
-            - data (dict, optional): Result data if successful
-            - files (list, optional): Created files if any
-            - action (str, optional): Action type that was attempted
-        
-        Example:
-            >>> # Allowed action
-            >>> result = agent.process_command("Generate report for Delhi")
-            >>> print(result)
-            {
-                "success": True,
-                "message": "Action completed successfully",
-                "data": {"report_file": "output/delhi_report.txt", ...},
-                "files": ["output/delhi_report.txt"],
-                "action": "generate_report"
-            }
             
-            >>> # Blocked action
-            >>> result = agent.process_command("Shutdown factory")
-            >>> print(result)
-            {
-                "success": False,
-                "message": "Action blocked by policy: Critical infrastructure control requires human authorization",
-                "action": "shutdown_factory"
-            }
+        Returns:
+            Dictionary with success status, message, and data
         """
-        # Update statistics
-        self._stats["total_commands"] += 1
-        
-        # Step 1: Validate input
-        if not user_command or not isinstance(user_command, str):
-            self._stats["errors"] += 1
-            return {
-                "success": False,
-                "message": "Invalid command input: command must be a non-empty string"
-            }
-        
-        if not user_command.strip():
-            self._stats["errors"] += 1
-            return {
-                "success": False,
-                "message": "Invalid command input: command cannot be empty or whitespace"
-            }
+        print(f"\n💬 User Command: \"{user_command}\"")
         
         try:
-            # Step 2: Parse intent from natural language
-            intent = self.intent_parser.parse_intent(user_command)
+            # Step 1: Parse intent
+            intent = self.parser.parse_intent(user_command)
+            print(f"🧠 Parsed Intent: {intent.action} (confidence: {intent.confidence})")
             
-            # Step 3: Validate intent structure
-            if not self.intent_parser.validate_intent_structure(intent):
-                self._stats["errors"] += 1
-                self.logger.log_action(
-                    intent=intent,
-                    policy_decision=None,
-                    result=None,
-                    status="ERROR"
-                )
-                return {
-                    "success": False,
-                    "message": "Could not parse command into valid intent",
-                    "action": intent.action if intent else "unknown"
-                }
+            # Step 2: Enforce and execute
+            result = self.enforcer.enforce_and_execute(intent)
             
-            # Step 4: Validate against policy
-            policy_decision = self.policy_engine.validate_intent(intent)
-            
-            # Step 5: Check if action is allowed
-            if not policy_decision.allowed:
-                # Action is BLOCKED by policy
-                self._stats["blocked_actions"] += 1
-                
-                # The enforcer will log this, but we return the denial immediately
-                result = self.enforcer.enforce_and_execute(intent, policy_decision)
-                
-                return {
-                    "success": False,
-                    "message": result.message,
-                    "action": intent.action,
-                    "blocked_reason": policy_decision.reason,
-                    "policy_rule": policy_decision.rule_name
-                }
-            
-            # Step 6: Execute approved action (enforcer handles logging)
-            execution_result = self.enforcer.enforce_and_execute(intent, policy_decision)
-            
-            # Step 7: Update statistics
-            if execution_result.success:
-                self._stats["successful_actions"] += 1
-            else:
-                self._stats["errors"] += 1
-            
-            # Step 8: Return result to user
-            response = {
-                "success": execution_result.success,
-                "message": execution_result.message,
-                "action": intent.action
-            }
-            
-            # Add optional fields if present
-            if execution_result.data:
-                response["data"] = execution_result.data
-            
-            if execution_result.files_created:
-                response["files"] = execution_result.files_created
-            
-            if execution_result.execution_time:
-                response["execution_time"] = execution_result.execution_time
-            
-            return response
+            return result
             
         except Exception as e:
-            # Handle unexpected errors
-            self._stats["errors"] += 1
-            
-            # Log error
-            self.logger.log_action(
-                intent=None,
-                policy_decision=None,
-                result=None,
-                status="ERROR"
-            )
-            
+            error_msg = f"Agent error: {str(e)}"
+            print(f"❌ {error_msg}")
             return {
                 "success": False,
-                "message": f"System error: {str(e)}"
+                "message": error_msg,
+                "data": None
             }
     
-    def get_status(self) -> Dict[str, Any]:
-        """
-        Get current system status and statistics.
+    def get_allowed_actions(self) -> list:
+        """Get list of allowed actions from policy."""
+        return self.policy_engine.get_allowed_actions()
+    
+    def get_system_status(self) -> Dict[str, Any]:
+        """Get system status and statistics."""
+        logs = self.logger.get_logs()
         
-        Returns:
-            Dictionary with system status including:
-            - total_commands: Total commands processed
-            - successful_actions: Number of successful executions
-            - blocked_actions: Number of blocked actions
-            - errors: Number of errors
-            - allowed_actions: List of actions allowed by policy
+        total_actions = len(logs)
+        blocked_actions = len([log for log in logs if log.get("status") == "BLOCKED"])
+        successful_actions = len([log for log in logs if log.get("status") == "SUCCESS"])
+        errors = len([log for log in logs if log.get("status") == "ERROR"])
         
-        Example:
-            >>> status = agent.get_status()
-            >>> print(status)
-            {
-                "total_commands": 10,
-                "successful_actions": 6,
-                "blocked_actions": 3,
-                "errors": 1,
-                "allowed_actions": ["generate_report", "analyze_aqi", "send_alert"]
-            }
-        """
         return {
-            "total_commands": self._stats["total_commands"],
-            "successful_actions": self._stats["successful_actions"],
-            "blocked_actions": self._stats["blocked_actions"],
-            "errors": self._stats["errors"],
-            "allowed_actions": self.policy_engine.get_allowed_actions()
+            "total_actions": total_actions,
+            "successful_actions": successful_actions,
+            "blocked_actions": blocked_actions,
+            "errors": errors,
+            "allowed_actions": self.get_allowed_actions()
         }

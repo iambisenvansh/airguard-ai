@@ -246,10 +246,12 @@ class IntentParser:
         if location:
             parameters['location'] = location
         
-        # Extract severity (for alerts)
+        # Extract severity and message (for alerts)
         if action == 'send_alert':
             severity = self._extract_severity(command)
             parameters['severity'] = severity if severity else 'warning'
+            # Extract message from command (use the command itself as message if not specified)
+            parameters['message'] = self._extract_alert_message(command)
         
         # Extract filename (for reports)
         if action == 'generate_report':
@@ -330,6 +332,45 @@ class IntentParser:
             return match.group(1)
         
         return None
+    
+    def _extract_alert_message(self, command: str) -> str:
+        """
+        Extract alert message from command.
+        
+        Extracts the message content from alert commands, removing the action keywords.
+        
+        Args:
+            command: The command string
+            
+        Returns:
+            Alert message string
+        """
+        # Remove common alert keywords to get the message
+        message = command
+        
+        # Remove action keywords
+        keywords_to_remove = [
+            r'\b(send|issue|broadcast|trigger)\s+(an?\s+)?',
+            r'\b(info|warning|critical|high|low)?\s*(priority\s+)?alert\s+(about|for|regarding)?\s*',
+            r'\balert\s+(about|for|regarding)\s*',
+            r'\bnotify\s+(about|of)\s*'
+        ]
+        
+        for keyword_pattern in keywords_to_remove:
+            message = re.sub(keyword_pattern, '', message, flags=re.IGNORECASE)
+        
+        # Clean up extra whitespace
+        message = ' '.join(message.split())
+        
+        # If message is empty or too short, use a default
+        if not message or len(message) < 5:
+            location = self._extract_location(command)
+            if location:
+                message = f"High pollution levels detected in {location}"
+            else:
+                message = "High pollution levels detected"
+        
+        return message.strip()
     
     def _create_error_intent(self, command: str, error_message: str) -> Intent:
         """

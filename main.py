@@ -1,125 +1,145 @@
-#!/usr/bin/env python3
 """
 AirGuard AI - Main Demo Script
 
-This script demonstrates the complete AirGuard AI autonomous agent system with:
-- Natural language command processing
-- Policy-based security enforcement
-- OpenClaw integration for system operations
-- Comprehensive audit logging
-
-CRITICAL FOR HACKATHON: This demo shows both ALLOWED and BLOCKED actions to
-demonstrate the policy enforcement layer.
-
-Run this script to see the system in action!
+This script demonstrates the complete AirGuard AI pollution monitoring system
+for the hackathon judges. It shows:
+1. Allowed actions (generate report, analyze AQI, send alert)
+2. Blocked actions (shutdown factory, issue fine)
+3. OpenClaw integration
+4. Policy enforcement
+5. Audit logging
 """
 
-import sys
-import os
-
-# Add current directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
 from agent import AirGuardAgent
-from intent import IntentParser
-from policy import PolicyEngine
-from enforce import Enforcer
-from executor import Executor
-from logger import AuditLogger
+import json
 
 
-def print_separator(char="=", length=80):
-    """Print a separator line."""
-    print(char * length)
+def print_separator():
+    """Print a visual separator."""
+    print("\n" + "="*80 + "\n")
 
 
-def print_header(title):
-    """Print a formatted header."""
-    print_separator()
-    print(f"  {title}")
-    print_separator()
-    print()
-
-
-def print_result(result, command):
-    """Print formatted command result."""
-    print(f"Command: \"{command}\"")
-    print(f"Action: {result.get('action', 'unknown')}")
-    print(f"Success: {result['success']}")
-    print(f"Message: {result['message']}")
-    
-    if result.get('data'):
-        print(f"\nData:")
-        for key, value in result['data'].items():
-            if isinstance(value, dict):
-                print(f"  {key}:")
-                for k, v in value.items():
-                    print(f"    {k}: {v}")
-            else:
-                print(f"  {key}: {value}")
-    
-    if result.get('files'):
-        print(f"\nFiles Created:")
-        for file in result['files']:
-            print(f"  - {file}")
-    
-    if result.get('execution_time'):
-        print(f"\nExecution Time: {result['execution_time']:.3f} seconds")
-    
-    if result.get('blocked_reason'):
-        print(f"\n⚠️  BLOCKED REASON: {result['blocked_reason']}")
-        print(f"Policy Rule: {result.get('policy_rule', 'unknown')}")
-    
-    print()
+def print_result(result):
+    """Print formatted result."""
+    if result["success"]:
+        print(f"✅ SUCCESS: {result['message']}")
+        if result.get("data"):
+            print(f"📊 Data: {json.dumps(result['data'], indent=2)}")
+        if result.get("files_created"):
+            print(f"📄 Files Created: {result['files_created']}")
+    else:
+        print(f"❌ FAILED: {result['message']}")
+        if result.get("data"):
+            print(f"📊 Data: {json.dumps(result['data'], indent=2)}")
 
 
 def main():
-    """
-    Main demo function that initializes the system and runs example commands.
+    """Run the AirGuard AI demo."""
     
-    This demonstrates:
-    1. System initialization with all components
-    2. Allowed actions (generate report, analyze AQI, send alert)
-    3. Blocked actions (shutdown factory, issue fine)
-    4. Audit log viewing
-    """
-    print_header("AIRGUARD AI - AUTONOMOUS POLLUTION MONITORING SYSTEM")
-    print("Hackathon Demo - Policy-Based AI Agent with OpenClaw Integration")
-    print()
+    print("="*80)
+    print("🌍 AIRGUARD AI - AUTONOMOUS POLLUTION MONITORING SYSTEM")
+    print("="*80)
+    print("\nDemo for Hackathon Judges")
+    print("Showing: Intent Parsing, Policy Enforcement, OpenClaw Integration, Audit Logging")
+    print_separator()
     
-    # ========================================================================
-    # STEP 1: Initialize all system components
-    # ========================================================================
-    print("Initializing AirGuard AI system...")
-    print()
+    # Initialize the agent
+    agent = AirGuardAgent()
     
-    try:
-        # Create components
-        logger = AuditLogger(log_dir="logs/")
-        intent_parser = IntentParser()
-        policy_engine = PolicyEngine(policy_file="policy.json")
-        executor = Executor(data_dir="data/", output_dir="output/")
-        enforcer = Enforcer(executor, logger)
-        
-        # Initialize agent
-        agent = AirGuardAgent(intent_parser, policy_engine, enforcer, logger)
-        
-        print("✓ System initialized successfully!")
-        print()
-        
-        # Show allowed actions
-        status = agent.get_status()
-        print(f"Allowed Actions: {', '.join(status['allowed_actions'])}")
-        print()
-        
-    except Exception as e:
-        print(f"❌ Failed to initialize system: {e}")
-        return 1
+    print_separator()
+    print("📋 ALLOWED ACTIONS (from policy):")
+    print(agent.get_allowed_actions())
     
     # ========================================================================
-    # STEP 2: Demonstrate ALLOWED actions
+    # DEMO 1: ALLOWED ACTION - Generate Report
     # ========================================================================
-    print_header("DEMO PART 1: ALLOWED ACTIONS")
-    print("These actions are permitted by the security policy and will execute.\n")
+    print_separator()
+    print("🟢 DEMO 1: ALLOWED ACTION - Generate Pollution Report")
+    print("-" * 80)
     
-    # Example 1: Generate pollution
+    result1 = agent.process_command("Generate pollution report for Delhi")
+    print_result(result1)
+    
+    # ========================================================================
+    # DEMO 2: ALLOWED ACTION - Analyze AQI
+    # ========================================================================
+    print_separator()
+    print("🟢 DEMO 2: ALLOWED ACTION - Analyze AQI Data")
+    print("-" * 80)
+    
+    result2 = agent.process_command("Analyze AQI in Delhi")
+    print_result(result2)
+    
+    # ========================================================================
+    # DEMO 3: ALLOWED ACTION - Send Alert
+    # ========================================================================
+    print_separator()
+    print("🟢 DEMO 3: ALLOWED ACTION - Send Pollution Alert")
+    print("-" * 80)
+    
+    result3 = agent.process_command("Send critical alert about high pollution levels in Delhi")
+    print_result(result3)
+    
+    # ========================================================================
+    # DEMO 4: BLOCKED ACTION - Shutdown Factory
+    # ========================================================================
+    print_separator()
+    print("🔴 DEMO 4: BLOCKED ACTION - Shutdown Factory")
+    print("-" * 80)
+    print("⚠️  This action should be BLOCKED by policy enforcement!")
+    
+    result4 = agent.process_command("Shutdown factory in Mayapuri")
+    print_result(result4)
+    
+    # ========================================================================
+    # DEMO 5: BLOCKED ACTION - Issue Fine
+    # ========================================================================
+    print_separator()
+    print("🔴 DEMO 5: BLOCKED ACTION - Issue Fine")
+    print("-" * 80)
+    print("⚠️  This action should be BLOCKED by policy enforcement!")
+    
+    result5 = agent.process_command("Issue fine to polluting factory")
+    print_result(result5)
+    
+    # ========================================================================
+    # SYSTEM STATUS
+    # ========================================================================
+    print_separator()
+    print("📊 SYSTEM STATUS & STATISTICS")
+    print("-" * 80)
+    
+    status = agent.get_system_status()
+    print(f"Total Actions Processed: {status['total_actions']}")
+    print(f"✅ Successful Actions: {status['successful_actions']}")
+    print(f"❌ Blocked Actions: {status['blocked_actions']}")
+    print(f"⚠️  Errors: {status['errors']}")
+    
+    # ========================================================================
+    # AUDIT LOG SAMPLE
+    # ========================================================================
+    print_separator()
+    print("📝 AUDIT LOG SAMPLE (Last 3 entries)")
+    print("-" * 80)
+    
+    logs = agent.logger.get_logs()
+    for log in logs[-3:]:
+        print(f"\nTimestamp: {log.get('timestamp')}")
+        print(f"Action: {log.get('intent', {}).get('action')}")
+        print(f"Status: {log.get('status')}")
+        print(f"Command: {log.get('intent', {}).get('user_command')}")
+    
+    print_separator()
+    print("✅ DEMO COMPLETE!")
+    print("\nKey Features Demonstrated:")
+    print("  ✓ Natural language intent parsing")
+    print("  ✓ Policy-based security enforcement")
+    print("  ✓ OpenClaw integration for file operations")
+    print("  ✓ Blocked dangerous actions (shutdown, fines)")
+    print("  ✓ Comprehensive audit logging")
+    print("  ✓ Real-time pollution data analysis")
+    print_separator()
+
+
+if __name__ == "__main__":
+    main()
