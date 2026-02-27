@@ -34,10 +34,10 @@ class AirGuardAgent:
         enforcer: Enforcer for security enforcement
     """
     
-    def __init__(self, data_dir: str = "airguard-ai/data", 
-                 output_dir: str = "airguard-ai/output",
-                 log_dir: str = "airguard-ai/logs",
-                 policy_file: str = "airguard-ai/policy.json"):
+    def __init__(self, data_dir: str = "data", 
+                 output_dir: str = "output",
+                 log_dir: str = "logs",
+                 policy_file: str = "policy.json"):
         """
         Initialize the AirGuard AI agent with all components.
         
