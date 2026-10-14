@@ -1,0 +1,61 @@
+{
+    "location": "Hyderabad",
+    "timestamp": "2024-01-15T10:00:00",
+    "data": [
+        {
+            "date": "2024-01-15",
+            "time": "10:00",
+            "aqi": 125,
+            "pm25": 62,
+            "pm10": 135,
+            "no2": 38,
+            "so2": 10,
+            "co": 0.6,
+            "category": "Unhealthy for Sensitive Groups"
+        },
+        {
+            "date": "2024-01-15",
+            "time": "11:00",
+            "aqi": 132,
+            "pm25": 68,
+            "pm10": 145,
+            "no2": 42,
+            "so2": 12,
+            "co": 0.7,
+            "category": "Unhealthy for Sensitive Groups"
+        },
+        {
+            "date": "2024-01-15",
+            "time": "12:00",
+            "aqi": 118,
+            "pm25": 55,
+            "pm10": 125,
+            "no2": 35,
+            "so2": 9,
+            "co": 0.55,
+            "category": "Unhealthy for Sensitive Groups"
+        },
+        {
+            "date": "2024-01-15",
+            "time": "13:00",
+            "aqi": 135,
+            "pm25": 70,
+            "pm10": 150,
+            "no2": 44,
+            "so2": 13,
+            "co": 0.72,
+            "category": "Unhealthy for Sensitive Groups"
+        },
+        {
+            "date": "2024-01-15",
+            "time": "14:00",
+            "aqi": 128,
+            "pm25": 64,
+            "pm10": 140,
+            "no2": 40,
+            "so2": 11,
+            "co": 0.65,
+            "category": "Unhealthy for Sensitive Groups"
+        }
+    ]
+}

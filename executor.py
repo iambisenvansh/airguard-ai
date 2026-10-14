@@ -455,21 +455,17 @@ class Executor:
         # Join all lines into report content
         report_content = "\n".join(report_lines)
         
-        # CRITICAL: Use OpenClaw to write the report file
-        # This is what hackathon judges will look for!
+        # Write the report file
         try:
-            self.pc.write_file(filepath, report_content)
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(report_content)
+            print(f"✅ Report file created: {filepath}")
         except Exception as e:
-            raise IOError(f"Failed to write report file using OpenClaw: {str(e)}")
+            raise IOError(f"Failed to write report file: {str(e)}")
         
-        # CRITICAL: Use OpenClaw to open the generated report
-        # This demonstrates full OpenClaw integration!
-        try:
-            self.pc.open_file(filepath)
-        except Exception as e:
-            # Don't fail if we can't open the file, just log it
-            # The report was still generated successfully
-            print(f"Warning: Could not open report file: {str(e)}")
+        # Verify file was created
+        if not os.path.exists(filepath):
+            raise IOError(f"Report file was not created at {filepath}")
         
         # Return result with report details
         result = {

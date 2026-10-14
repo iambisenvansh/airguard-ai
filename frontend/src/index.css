@@ -1,0 +1,228 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f9fa;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark body {
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1428 100%);
+  background-attachment: fixed;
+  color: #e5e7eb;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Tailwind imports */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark mode premium scrollbar */
+html.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  border-radius: 4px;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #059669 0%, #047857 100%);
+}
+
+/* Light mode scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Smooth transitions for dark mode */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode form inputs */
+input,
+select,
+textarea {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #0f1428;
+  color: #f3f4f6;
+  border-color: #1e3a5f;
+}
+
+html.dark input:focus,
+html.dark select:focus,
+html.dark textarea:focus {
+  border-color: #10b981;
+  background-color: #0a0e27;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Dark mode cards with subtle glow */
+html.dark .bg-white {
+  background-color: rgba(15, 20, 40, 0.8) !important;
+  border-color: rgba(16, 185, 129, 0.2) !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode hover effects */
+html.dark button:hover {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+/* Dark mode text colors */
+html.dark .text-gray-900 {
+  color: #f0f9ff !important;
+}
+
+html.dark .text-gray-700 {
+  color: #d1d5db !important;
+}
+
+html.dark .text-gray-600 {
+  color: #9ca3af !important;
+}
+
+html.dark .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+/* Dark mode border colors */
+html.dark .border-gray-200 {
+  border-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+html.dark .border-gray-700 {
+  border-color: rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Dark mode background with gradient */
+html.dark .bg-gray-50 {
+  background: rgba(10, 14, 39, 0.5) !important;
+}
+
+html.dark .bg-gray-100 {
+  background: rgba(15, 20, 40, 0.7) !important;
+}
+
+html.dark .bg-gray-800 {
+  background: rgba(10, 14, 39, 0.9) !important;
+}
+
+html.dark .bg-gray-900 {
+  background: rgba(5, 8, 25, 0.95) !important;
+}
+
+/* Header gradient in dark mode */
+html.dark .dark\:bg-gray-900 {
+  background: linear-gradient(135deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 31, 58, 0.9) 100%) !important;
+  border-color: rgba(16, 185, 129, 0.2) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Cards with subtle borders */
+html.dark .shadow-md {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .rounded-lg {
+  border: 1px solid rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Tables dark mode */
+html.dark table {
+  background-color: transparent;
+}
+
+html.dark tbody tr:hover {
+  background-color: rgba(16, 185, 129, 0.05) !important;
+}
+
+html.dark thead {
+  background-color: rgba(10, 14, 39, 0.8) !important;
+  border-color: rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Form elements styling */
+html.dark input::placeholder {
+  color: #6b7280;
+}
+
+html.dark select option {
+  background-color: #1a1f3a;
+  color: #e5e7eb;
+}
+
+/* Gradient text for accents */
+html.dark .text-green-600 {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Links styling */
+html.dark a {
+  color: #10b981;
+  transition: color 0.2s ease;
+}
+
+html.dark a:hover {
+  color: #059669;
+}
+
+/* Ensure smooth transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}

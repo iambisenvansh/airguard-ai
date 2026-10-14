@@ -226,12 +226,8 @@ All actions are logged to `logs/audit.log` in JSON format:
 
 ### What to Check
 
-1. **enforce.py** - Security enforcement layer with policy validation
-2. **policy.json** - Clear allow/block rules
-3. **executor.py** - OpenClaw integration (`from openclaw import Computer`)
-4. **main.py** - Run the demo to see blocked actions
+1. **enforce.py** - Security enforcement lyer with policy alidation**policy.json** - Clear allow/block rules3. **executor.py** - OpenClaw integration (`from openclaw import Computer`). **main.py** - Run the demo to see blocked actions
 5. **logs/** - Audit trail of all actions
-
 ### Run the Demo
 
 ```bash

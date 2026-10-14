@@ -1,0 +1,61 @@
+{
+    "location": "Ahmedabad",
+    "timestamp": "2024-01-15T10:00:00",
+    "data": [
+        {
+            "date": "2024-01-15",
+            "time": "10:00",
+            "aqi": 142,
+            "pm25": 75,
+            "pm10": 160,
+            "no2": 42,
+            "so2": 12,
+            "co": 0.7,
+            "category": "Unhealthy for Sensitive Groups"
+        },
+        {
+            "date": "2024-01-15",
+            "time": "11:00",
+            "aqi": 152,
+            "pm25": 82,
+            "pm10": 175,
+            "no2": 46,
+            "so2": 14,
+            "co": 0.78,
+            "category": "Unhealthy for Sensitive Groups"
+        },
+        {
+            "date": "2024-01-15",
+            "time": "12:00",
+            "aqi": 135,
+            "pm25": 68,
+            "pm10": 150,
+            "no2": 40,
+            "so2": 11,
+            "co": 0.65,
+            "category": "Unhealthy for Sensitive Groups"
+        },
+        {
+            "date": "2024-01-15",
+            "time": "13:00",
+            "aqi": 155,
+            "pm25": 85,
+            "pm10": 180,
+            "no2": 48,
+            "so2": 15,
+            "co": 0.80,
+            "category": "Unhealthy for Sensitive Groups"
+        },
+        {
+            "date": "2024-01-15",
+            "time": "14:00",
+            "aqi": 148,
+            "pm25": 78,
+            "pm10": 170,
+            "no2": 44,
+            "so2": 13,
+            "co": 0.75,
+            "category": "Unhealthy for Sensitive Groups"
+        }
+    ]
+}
